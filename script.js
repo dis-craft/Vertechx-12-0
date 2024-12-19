@@ -16,7 +16,7 @@ function initMap(latitude, longitude) {
 function getWeatherData(latitude, longitude) {
     const apiKey = "638fc1452091c8bda0337a9f55a6089f"; // Your OpenWeatherMap API key
     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-
+    
     fetch(weatherUrl)
         .then((response) => {
             if (!response.ok) {
@@ -68,5 +68,59 @@ navigator.geolocation.getCurrentPosition(
     },
     (error) => {
         document.getElementById("location").innerHTML = `Error: ${error.message}`;
+    }
+);
+function getEarthquakeData(latitude, longitude) {
+    const radius = 100; // Radius in km
+    const minMagnitude = 4.0; // Minimum magnitude
+    const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${latitude}&longitude=${longitude}&maxradiuskm=${radius}&minmagnitude=${minMagnitude}&orderby=time`;
+
+    fetch(apiUrl)
+        .then((response) => response.json()) // Convert response to JSON
+        .then((data) => {
+            displayEarthquakeData(data.features); // Process and display data
+        })
+        .catch((error) => console.error("Error fetching earthquake data:", error));
+}
+
+function displayEarthquakeData(earthquakes) {
+    const earthquakeInfo = document.getElementById("earthquakeInfo");
+    earthquakeInfo.innerHTML = ""; // Clear previous data
+
+    if (earthquakes.length === 0) {
+        earthquakeInfo.innerHTML = "<p>No recent earthquakes in the specified area.</p>";
+        return;
+    }
+
+    earthquakes.forEach((quake) => {
+        const magnitude = quake.properties.mag;
+        const place = quake.properties.place;
+        const time = new Date(quake.properties.time).toLocaleString();
+
+        // Display earthquake details
+        earthquakeInfo.innerHTML += `
+            <p>
+                <strong>Magnitude:</strong> ${magnitude} <br>
+                <strong>Location:</strong> ${place} <br>
+                <strong>Time:</strong> ${time}
+            </p>
+        `;
+    });
+}
+
+navigator.geolocation.getCurrentPosition(
+    (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Display location info
+        document.getElementById("location").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+        // Fetch earthquake data for user's location
+        getEarthquakeData(latitude, longitude);
+    },
+    (error) => {
+        console.error("Error getting user location:", error);
+        alert("Unable to fetch user location.");
     }
 );

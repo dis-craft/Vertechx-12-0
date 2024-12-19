@@ -22,3 +22,35 @@ body {
     font-size: 18px;
     font-weight: bold;
   }
+.map{
+    width: 400px;;
+}
+.headbar{
+    background: #f5f5f5;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    margin-bottom: 30px;
+}
+.headbarelements {
+    font-family: sans-serif;
+    color: rgb(1, 1, 1);
+    text-decoration: none;
+    padding: 16px;
+    border-radius:6px;
+    transition: box-shadow 0.23s;
+}
+.headbarelements:hover{
+    box-shadow: 1px 1px 10px rgba(56, 56, 56, 0.4);
+}
+.leftsections{
+    align-items: center;
+    text-decoration: none;
+    display: flex;
+    padding-left: 100px;
+    justify-content: space-evenly;
+}

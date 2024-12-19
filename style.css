@@ -1,56 +1,103 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f4f9;
     text-align: center;
-    padding: 20px;
-  }
+}
 
-  #getLocationButton {
+h1, h2, h3 {
+    color: #222;
+}
+
+/* Header Styles */
+.headbar {
+    background-color: #003366;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container img {
+    height: 50px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.headbarelements {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.headbarelements:hover {
+    color: #ffcc00;
+}
+
+/* Main Content */
+.mainbody {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.hero-section {
+    background: #004080;
     color: white;
+    padding: 50px 20px;
+    border-radius: 10px;
+}
+
+.hero-section p {
+    font-size: 18px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #ffcc00;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-  }
-
-  #getLocationButton:hover {
-    background-color: #45a049;
-  }
-
-  #location {
-    margin-top: 20px;
-    font-size: 18px;
     font-weight: bold;
-  }
-.map{
-    width: 400px;;
+    transition: background-color 0.3s ease;
 }
-.headbar{
-    background: #f5f5f5;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: fixed;
-    top: 0;
-    left: 0;
+
+button:hover {
+    background-color: #e6b800;
+}
+
+/* Map Section */
+.map-section {
+    margin: 30px auto;
+    max-width: 800px;
+}
+
+.map {
+    height: 400px;
     width: 100%;
-    z-index: 1000;
-    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
 }
-.headbarelements {
-    font-family: sans-serif;
-    color: rgb(1, 1, 1);
-    text-decoration: none;
-    padding: 16px;
-    border-radius:6px;
-    transition: box-shadow 0.23s;
-}
-.headbarelements:hover{
-    box-shadow: 1px 1px 10px rgba(56, 56, 56, 0.4);
-}
-.leftsections{
-    align-items: center;
-    text-decoration: none;
-    display: flex;
-    padding-left: 100px;
-    justify-content: space-evenly;
+
+/* Weather and Alerts Section */
+.weather-section, .alerts-section {
+    margin: 30px auto;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
 }

@@ -3,62 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title>Disaster Tracker</title> -->
-    <title>Vertechx 12.0</title>
+    <title>Disaster Preparedness and Emergency Response</title>
+    <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
     <script>
         window.embeddedChatbotConfig = {
             chatbotId: "cTicS-DDMkVuLhH5kJ-8i",
             domain: "www.chatbase.co"
-        }
+        };
     </script>
-    <script
-        src="https://www.chatbase.co/embed.min.js"
-        chatbotId="cTicS-DDMkVuLhH5kJ-8i"
-        domain="www.chatbase.co"
-        defer>
-    </script>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://www.chatbase.co/embed.min.js" defer></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhvCdJscFQAAoa9RExG43DSRwrFhFv5Ik&callback=initMap"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-functions.js"></script>  
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-functions.js"></script>
 </head>
-    <body>
-        <div class="headbar">
-
-            <div><a href="index.html">
-                    <img src="Images/mainlogo.png" class="logo"></a>
-            </div>
-    
-            <div class="leftsections">
-                <!-- <a href="#projects" class="headbarelements">Projects</a>
-                <a href="#experience" class="headbarelements">Experience</a>
-                <a href="#research" class="headbarelements">Researchs</a>
-                <a href="main.html" class="headbarelements">Timeline</a>
-                <a href="#blogs" class="headbarelements">Blogs</a>
-                <a href="#footer" class="headbarelements">Contact</a> -->
-            </div>
-    
+<body>
+    <header class="headbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Images/mainlogo.png" alt="Main Logo" class="logo">
+            </a>
         </div>
-        <div class="mainbody"><h1>Disaster Preparedness and Emergency Response</h1>
-        <button id="getLocationButton">Get My Location</button>
-        <p id="location"></p>
-        Your location
-        <div id="map" style="height: 400px; width: 60%;"></div>
-        <center><div class="map" id="weatherContainer"></div></center>
-        
-        <h3>Weather Information:</h3>
-        <p id="weatherDescription"></p>
-        <p id="temperature"></p>
-        <p id="humidity"></p>
-        <p id="windSpeed"></p>
+        <nav class="nav-links">
+            <a href="#projects" class="headbarelements">Projects</a>
+            <a href="#experience" class="headbarelements">Experience</a>
+            <a href="#research" class="headbarelements">Research</a>
+            <a href="main.html" class="headbarelements">Timeline</a>
+            <a href="#blogs" class="headbarelements">Blogs</a>
+            <a href="#footer" class="headbarelements">Contact</a>
+        </nav>
+    </header>
 
-        <div id="earthquakeInfo">
-        <h3>Earthquake Alerts:</h3>
-        <p>Loading...</p>
-        </div></div>
-        
+    <main class="mainbody">
+        <section class="hero-section">
+            <h1>Disaster Preparedness and Emergency Response</h1>
+            <p>Empowering individuals and communities to respond effectively to disasters with real-time data and resources.</p>
+            <button id="getLocationButton">Get My Location</button>
+            <p id="location"></p>
+        </section>
 
-    </body>
+        <section class="map-section">
+            <h2>Your Location</h2>
+            <div id="map" class="map"></div>
+        </section>
+
+        <section class="weather-section">
+            <h2>Weather Information in your location</h2>
+            <div id="weatherContainer">
+                <p id="weatherDescription">Loading...</p>
+                <p id="temperature"></p>
+                <p id="humidity"></p>
+                <p id="windSpeed"></p>
+            </div>
+        </section>
+
+        <section class="alerts-section">
+            <h2>Earthquake Alerts</h2>
+            <div id="earthquakeInfo">
+                <p>Loading...</p>
+            </div>
+        </section>
+    </main>
+</body>
 </html>

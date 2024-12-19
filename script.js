@@ -283,7 +283,6 @@ navigator.geolocation.getCurrentPosition(
     }
 );
 
-<script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBSbonwVE3PPXIIrSrvrB75u2AQ_B_Tni4",
@@ -446,4 +445,3 @@ navigator.geolocation.getCurrentPosition(
                 alert("Unable to fetch user location.");
             }
         );
-    </script>

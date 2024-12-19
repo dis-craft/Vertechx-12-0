@@ -445,3 +445,175 @@ navigator.geolocation.getCurrentPosition(
                 alert("Unable to fetch user location.");
             }
 );
+
+// Supabase Configuration
+const supabaseUrl = 'https://tnfwfqwazsbpbgpkwekt.supabase.co'; // Replace with your Supabase URL
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRuZndmcXdhenNicGJncGt3ZWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2MDY0MzAsImV4cCI6MjA1MDE4MjQzMH0.tovh4Qfl_08W-6e9sLc4kleyVXiP5bqusFzt7ubuuMw'; // Replace with your Supabase API Key
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+// Function to initialize the map with the user’s latitude and longitude
+function initMap(latitude, longitude) {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: latitude, lng: longitude },
+        zoom: 15,
+    });
+
+    const marker = new google.maps.Marker({
+        position: { lat: latitude, lng: longitude },
+        map: map,
+    });
+}
+
+// Function to get weather data from OpenWeatherMap API
+function getWeatherData(latitude, longitude) {
+    const apiKey = "638fc1452091c8bda0337a9f55a6089f"; // OpenWeatherMap API key
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    fetch(weatherUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch weather data. Status code: " + response.status);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data); // Log weather data
+
+            if (data.cod !== 200) {
+                throw new Error("Weather data fetch error: " + data.message);
+            }
+
+            const weather = data.weather[0].description;
+            const temperature = data.main.temp;
+            const humidity = data.main.humidity;
+            const windSpeed = data.wind.speed;
+
+            // Display weather data on the webpage
+            document.getElementById("weatherDescription").innerText = `Weather: ${weather}`;
+            document.getElementById("temperature").innerText = `Temperature: ${temperature}°C`;
+            document.getElementById("humidity").innerText = `Humidity: ${humidity}%`;
+            document.getElementById("windSpeed").innerText = `Wind Speed: ${windSpeed} m/s`;
+        })
+        .catch((error) => {
+            console.error("Error fetching weather data:", error);
+            alert("Unable to fetch weather data: " + error.message);
+        });
+}
+
+// Function to get earthquake data from the USGS API
+function getEarthquakeData(latitude, longitude) {
+    const radius = 100; // Radius in km
+    const minMagnitude = 4.0; // Minimum magnitude
+    const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${latitude}&longitude=${longitude}&maxradiuskm=${radius}&minmagnitude=${minMagnitude}&orderby=time`;
+
+    fetch(apiUrl)
+        .then((response) => response.json()) // Convert response to JSON
+        .then((data) => {
+            displayEarthquakeData(data.features); // Process and display data
+        })
+        .catch((error) => console.error("Error fetching earthquake data:", error));
+}
+
+// Function to display and send earthquake data to Supabase
+function displayEarthquakeData(earthquakes) {
+    const earthquakeInfo = document.getElementById("earthquakeInfo");
+    earthquakeInfo.innerHTML = ""; // Clear previous data
+
+    if (earthquakes.length === 0) {
+        earthquakeInfo.innerHTML = "<p>No recent earthquakes in the specified area.</p>";
+        return;
+    }
+
+    earthquakes.forEach((quake) => {
+        const magnitude = quake.properties.mag;
+        const place = quake.properties.place;
+        const time = new Date(quake.properties.time).toLocaleString();
+        const coords = quake.geometry.coordinates;
+
+        // Display earthquake details
+        earthquakeInfo.innerHTML += `
+            <p>
+                <strong>Magnitude:</strong> ${magnitude} <br>
+                <strong>Location:</strong> ${place} <br>
+                <strong>Time:</strong> ${time}
+            </p>
+        `;
+
+        // Prepare earthquake data to be sent to Supabase
+        const earthquakeData = {
+            magnitude: magnitude,
+            location: place,
+            time: time,
+            coordinates: {
+                lat: coords[1],
+                lng: coords[0]
+            }
+        };
+
+        // Push earthquake data to Supabase
+        supabase
+            .from('earthquakeAlerts') // 'earthquakeAlerts' is your table name in Supabase
+            .insert([earthquakeData])
+            .then(() => {
+                console.log("Earthquake data saved to Supabase");
+            })
+            .catch((error) => {
+                console.error("Error saving earthquake data to Supabase:", error);
+            });
+    });
+}
+
+// Fetch user's geolocation and display on the map, also get weather and earthquake data
+navigator.geolocation.getCurrentPosition(
+    (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Display location info
+        document.getElementById("location").innerHTML = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+        // Initialize map with user's location
+        initMap(latitude, longitude);
+
+        // Fetch and display weather data
+        getWeatherData(latitude, longitude);
+
+        // Fetch and display earthquake data
+        getEarthquakeData(latitude, longitude);
+        
+        // Send location data to Supabase
+        supabase
+            .from('userLocation') // 'userLocation' is your table name in Supabase
+            .insert([{ latitude, longitude }])
+            .then(() => console.log("User location saved to Supabase"))
+            .catch((error) => console.error("Error saving location data to Supabase:", error));
+    },
+    (error) => {
+        document.getElementById("location").innerHTML = `Error: ${error.message}`;
+    }
+);
+async function fetchEarthquakeData() {
+    const { data, error } = await supabase
+        .from('earthquakeAlerts')
+        .select('*');
+
+    if (error) {
+        console.error('Error fetching earthquake data:', error);
+    } else {
+        console.log('Earthquake data:', data);
+    }
+}
+// Example of saving location data
+async function saveLocation(latitude, longitude) {
+    const { data, error } = await supabase
+        .from('userLocation')
+        .insert([
+            { latitude: latitude, longitude: longitude }
+        ]);
+
+    if (error) {
+        console.error('Error saving location:', error);
+    } else {
+        console.log('Location saved:', data);
+    }
+}

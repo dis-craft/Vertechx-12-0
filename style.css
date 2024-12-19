@@ -16,7 +16,7 @@ h1, h2, h3 {
 .headbar {
     background-color: #003366;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     padding: 10px 20px;
     position: fixed;

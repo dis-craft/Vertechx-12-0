@@ -444,4 +444,4 @@ navigator.geolocation.getCurrentPosition(
                 console.error("Error getting user location:", error);
                 alert("Unable to fetch user location.");
             }
-        );
+);
